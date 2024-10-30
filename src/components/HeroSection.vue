@@ -378,6 +378,11 @@ export default {
                     this.toastNotification('Failed to retrieve message. Please try again.', 'error');
                 });
         },
+
+        refreshPage() {
+            console.clear()
+            this.$router.go();
+        },
     },
 }
 </script>

@@ -19,30 +19,37 @@
                         <div class="py-10 w-fit m-auto rounded-md border-2 px-20 mt-10 border-slate-600 border-dashed">
                             <h2 class="text-lg font-medium text-slate-100 my-4">Your Temporary Email Address :</h2>
                             <div class="flex justify-center items-center">
-                                <input v-model="tempMail" type="text" placeholder="tempMail address" class="pointer-events-none select-none bg-slate-800 rounded-full py-4 px-7 w-[30rem] text-lg text-white font-sans border-none outline-none" name="tempmail" readonly>
-                                <button @click="copyTempMail(tempMail)" type="button" class="cursor-pointer rounded-full h-auto bg-indigo-600 ml-2 p-4">
-                                    <IconCopy color="#fff"/>
+                                <input v-model="tempMail" type="text" placeholder="tempMail address"
+                                    class="pointer-events-none select-none bg-slate-800 rounded-full py-4 px-7 w-[30rem] text-lg text-white font-sans border-none outline-none"
+                                    name="tempmail" readonly>
+                                <button @click="copyTempMail(tempMail)" type="button"
+                                    class="cursor-pointer rounded-full h-auto bg-indigo-600 ml-2 p-4">
+                                    <IconCopy color="#fff" />
                                 </button>
                             </div>
                         </div>
                     </form>
                     <div class="flex justify-evenly w-[50rem] mx-auto mt-12">
-                        <button :disabled="isLoading" class="flex items-center capitalize text-[17px] font-[400] rounded-3xl h-[43px] px-10 bg-indigo-600 text-white"
+                        <button :disabled="isLoading"
+                            class="flex items-center capitalize text-[17px] font-[400] rounded-3xl h-[43px] px-10 bg-indigo-600 text-white"
                             @click="generateFakeDomains()">
                             <IconGenerate class="w-[22.5px] mt-[2px] mr-2" />
                             generate
                         </button>
-                        <button :disabled="isLoading" class="flex items-center capitalize text-[17px] font-[400] rounded-3xl h-[43px] px-10 bg-indigo-600 text-white"
+                        <button :disabled="isLoading"
+                            class="flex items-center capitalize text-[17px] font-[400] rounded-3xl h-[43px] px-10 bg-indigo-600 text-white"
                             @click="copyTempMail(tempMail)">
                             <IconCopy class="w-[22.5px] mr-2" />
                             copy
                         </button>
-                        <button :disabled="isLoading" class="flex items-center capitalize text-[17px] font-[400] rounded-3xl h-[43px]  px-10 bg-indigo-600 text-white"
+                        <button :disabled="isLoading"
+                            class="flex items-center capitalize text-[17px] font-[400] rounded-3xl h-[43px]  px-10 bg-indigo-600 text-white"
                             @click="refreshPage()">
                             <IocnRefresh class="w-[22.5px] mr-2" />
                             refresh
                         </button>
-                        <button :disabled="isLoading" class="flex items-center capitalize text-[17px] font-[400] rounded-3xl h-[43px]  px-10 bg-indigo-600 text-white">
+                        <button :disabled="isLoading"
+                            class="flex items-center capitalize text-[17px] font-[400] rounded-3xl h-[43px]  px-10 bg-indigo-600 text-white">
                             <IconDelete class="w-[22.5px] mr-2" />
                             delete
                         </button>
@@ -52,7 +59,8 @@
         </div>
         <inBox :isWait="isWait">
             <RecievedMsg v-if="isMsg">
-                <div v-for="(msg, index) in messages" :key="index" :class="index === 0 ? '' : 'mt-3'" class="flex items-center justify-between bg-white py-2 px-4">
+                <div v-for="(msg, index) in messages" :key="index" :class="index === 0 ? '' : 'mt-3'"
+                    class="flex items-center justify-between bg-white py-2 px-4">
                     <div class="w-1/3">
                         <h1 class="font-medium text-slate-900 uppercase">{{ msg.fullname }}</h1>
                         <p class="text-sm text-slate-500">{{ msg.address }}</p>
@@ -61,7 +69,8 @@
                         <h3>{{ msg.subject }}</h3>
                     </div>
                     <div class="w-1/3 text-right">
-                        <button type="button" @click="getMessage(msg.id)" class="bg-indigo-500 rounded-md text-base capitalize text-white py-1 px-4">view</button>
+                        <button type="button" @click="getMessage(msg.id)"
+                            class="bg-indigo-500 rounded-md text-base capitalize text-white py-1 px-4">view</button>
                     </div>
                 </div>
             </RecievedMsg>
@@ -147,6 +156,49 @@ export default {
             });
         },
 
+        generateFakeDomains() {
+            this.tempMail = "Loading..."
+            this.isLoading = true
+
+            this.messages = [];
+            this.message = {};
+            this.isWait = true;
+            this.isMsg = false;
+
+            const Numbers = "0123456789"
+            let GeneratedUser = "";
+            let FullUser = ""
+            for (let i = 0; i < 3; i++) {
+                GeneratedUser += Numbers.charAt(Math.floor(Math.random() * Numbers.length))
+            }
+            fetch("https://randomuser.me/api/")
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .then(data => {
+                    let FirstName = data.results[0].name.first
+                    let LastName = data.results[0].name.last
+                    FullUser = FirstName + LastName + GeneratedUser
+                    return FullUser.toLowerCase();
+                })
+                .then(FullUser => {
+                    this.messages = [];
+                    this.message = {};
+                    this.isWait = true;
+                    this.isMsg = false;
+                    return this.tempMailEngine(FullUser)
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                    this.toastNotification('Failed to generate domain name. Please try again.', 'error');
+                    this.tempMail = "error domain name";
+                    this.isLoading = false;
+                });
+        },
     },
 }
 </script>

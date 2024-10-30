@@ -397,5 +397,14 @@ export default {
             }
         },
     },
+
+    mounted() {
+        this.messages = [];
+        this.message = {};
+        this.isWait = true;
+        this.isMsg = false;
+
+        return this.generateFakeDomains();
+    }
 }
 </script>

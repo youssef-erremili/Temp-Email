@@ -344,6 +344,40 @@ export default {
                     }
                 });
         },
+
+        getMessage(messageId) {
+            fetch(`https://api.mail.tm/messages/${messageId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data) {
+                        this.message = {
+                            sender: data.from['name'],
+                            address: data.from['address'],
+                            subject: data.subject,
+                            content: data.intro,
+                            bcc: data.bcc.length > 0 ? data.bcc[0].address : "No Bcc available",
+                            cc: data.cc.length > 0 ? data.cc[0].address : "No Cc available",
+                            html: data.html
+                        };
+                        this.visible = true
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching message:', error);
+                    this.toastNotification('Failed to retrieve message. Please try again.', 'error');
+                });
+        },
     },
 }
 </script>

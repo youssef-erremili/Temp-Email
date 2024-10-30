@@ -135,5 +135,18 @@ export default {
             clearInterval(this.intervalId);
         }
     },
+    methods: {
+        toastNotification(message, type) {
+            const $toast = useToast();
+            $toast.open({
+                message: message,
+                type: type,
+                duration: 1800,
+                dismissible: true,
+                position: 'top-right'
+            });
+        },
+
+    },
 }
 </script>

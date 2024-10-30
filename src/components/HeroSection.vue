@@ -297,6 +297,53 @@ export default {
                     console.error('There was a problem with the fetch operation:', error);
                 });
         },
+
+        fetchMessages() {
+            fetch('https://api.mail.tm/messages', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .then(data => {
+                    if (!data['hydra:member'] || data['hydra:member'].length === 0) {
+                        this.isMsg = false
+                        this.isWait = true
+                    } else {
+                        this.isMsg = true
+                        this.isWait = false
+                        data['hydra:member'].forEach(msg => {
+                            const newMessage = {
+                                fullname: msg["from"]["name"],
+                                address: msg["from"]["address"],
+                                subject: msg["subject"],
+                                id: msg["id"],
+                            };
+
+                            const exists = this.messages.some(existingMsg => existingMsg.id === newMessage.id);
+                            if (!exists) {
+                                this.messages.push(newMessage);
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    this.isMsg = false;
+                    this.isWait = true;
+                    this.toastNotification('Failed to fetch messages. Please try again.', 'error');
+                    console.error('There was a problem with the fetch operation:', error);
+                    if (this.intervalId) {
+                        clearInterval(this.intervalId);
+                    }
+                });
+        },
     },
 }
 </script>

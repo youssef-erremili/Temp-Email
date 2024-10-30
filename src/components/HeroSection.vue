@@ -264,6 +264,39 @@ export default {
                     console.error('There was a problem with the fetch operation:', error);
                 });
         },
+
+        getToken() {
+            fetch('https://api.mail.tm/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    address: this.tempMail,
+                    password: this.passWord
+                })
+            })
+                .then(response => {
+                    if (response) {
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    this.token = data.token
+                })
+                .then(() => {
+                    setTimeout(() => {
+                        this.intervalId = setInterval(() => {
+                            this.fetchMessages();
+                        }, 3000);
+                    }, 6000);
+                })
+                .catch(error => {
+                    this.tempMail = "error";
+                    this.toastNotification('Failed to retrieve token. Please try again.', 'error');
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        },
     },
 }
 </script>

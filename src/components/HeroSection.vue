@@ -383,6 +383,19 @@ export default {
             console.clear()
             this.$router.go();
         },
+
+        copyTempMail(text) {
+            if (this.tempMail !== "") {
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        this.toastNotification('tempMail copied successfully', 'info')
+                    })
+                    .catch(err => {
+                        this.toastNotification('Could not copy text!', 'error');
+                        console.log(err)
+                    });
+            }
+        },
     },
 }
 </script>

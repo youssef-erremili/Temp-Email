@@ -199,6 +199,36 @@ export default {
                     this.isLoading = false;
                 });
         },
+
+        tempMailEngine(userName) {
+            fetch('https://api.mail.tm/domains')
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        this.toastNotification('Network response was not ok', 'warning')
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .then(data => {
+                    const domain = data['hydra:member'][0].domain;
+                    this.tempMail = `${userName}@${domain}`;
+                    this.isLoading = false;
+                })
+                .then(() => {
+                    this.messages = [];
+                    this.message = {};
+                    this.isWait = true;
+                    this.isMsg = false;
+                    return this.createAccount();
+                })
+                .catch(error => {
+                    this.isLoading = false;
+                    this.tempMail = "try again";
+                    console.error('There was a problem with the fetch operation:', error);
+                    this.toastNotification('Failed to process temporary email. Please try again.', 'error');
+                });
+        },
     },
 }
 </script>

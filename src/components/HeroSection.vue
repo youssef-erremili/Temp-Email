@@ -130,6 +130,10 @@ export default {
             intervalId: null
         }
     },
-    
+    beforeDestroy() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+        }
+    },
 }
 </script>

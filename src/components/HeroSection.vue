@@ -229,6 +229,41 @@ export default {
                     this.toastNotification('Failed to process temporary email. Please try again.', 'error');
                 });
         },
+
+        createAccount() {
+            fetch('https://api.mail.tm/accounts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    address: this.tempMail,
+                    password: this.passWord
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                })
+                .then((data) => {
+                    if (data) {
+                        this.toastNotification('TempMail created successfully', 'success')
+                    }
+                    else {
+                        this.tempMail = "error to create account";
+                        this.toastNotification('Please refresh the page for another account', 'error');
+                    }
+                })
+                .then(() => {
+                    return this.getToken();
+                })
+                .catch(error => {
+                    this.tempMail = "error"
+                    this.toastNotification('Failed to create account. Please try again.', 'error');
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        },
     },
 }
 </script>

@@ -2,8 +2,6 @@
 
 TempMail is a minimalist, modern, and secure temporary email generator. It allows users to generate disposable email addresses to keep their real mailboxes clean from spam, advertising, and potential security threats.
 
-![TempMail Preview](file:///C:/Users/youss/.gemini/antigravity/brain/8c97e20b-ab16-4ac6-899e-aa6cbc2190d2/verify_tempmail_final_1772155412843.webp)
-
 ## ✨ Features
 
 - **Minimalist Design**: A premium, cluttered-free interface focused on usability.
@@ -61,4 +59,4 @@ TempMail is a minimalist, modern, and secure temporary email generator. It allow
 This project is open-source and available under the MIT License.
 
 ---
-Developed with ❤️ by [Errehub](https://github.com/youssef-erremili)
+Developed with ❤️ by [Youssef Erremili](https://github.com/youssef-erremili)

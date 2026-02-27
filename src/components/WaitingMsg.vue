@@ -1,17 +1,21 @@
 <template>
-    <div class="w-fit mx-auto text-center mt-20">
-        <IconWait class="w-fit inline-table" />
-        <p class="text-[20px]">Your inbox is empty</p>
-        <p>Waiting for incoming emails</p>
+    <div class="flex flex-col items-center justify-center py-24">
+        <!-- Minimalist Dot Animation -->
+        <div class="flex space-x-2 mb-6">
+            <div class="w-2 h-2 bg-indigo-600 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+            <div class="w-2 h-2 bg-indigo-600 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+            <div class="w-2 h-2 bg-indigo-600 rounded-full animate-bounce"></div>
+        </div>
+
+        <div class="text-center">
+            <h3 class="text-lg font-bold text-slate-900 uppercase tracking-wider">Waiting for emails</h3>
+            <p class="text-sm text-indigo-600 mt-1 font-medium italic">Refreshing automatically...</p>
+        </div>
     </div>
 </template>
 
 <script>
-import IconWait from './icons/IconWait.vue'
-
 export default {
-    components: {
-        IconWait
-    }
+    name: 'WaitingMsg'
 }
 </script>

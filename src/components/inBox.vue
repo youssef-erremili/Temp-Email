@@ -1,24 +1,27 @@
 <template>
-    <div>
-        <div class="relative w-3/4 my-10 h-96 mx-auto rounded-md overflow-hidden bg-slate-50 border">
-            <div class="flex items-center justify-between w-full bg-slate-800 py-4 px-8">
-                <section class="text-lg capitalize">
-                    <h2>sender</h2>
-                </section>
-                <section class="text-lg capitalize">
-                    <h2>subject</h2>
-                </section>
-                <section class="text-lg capitalize">
-                    <h2>view</h2>
-                </section>
+    <div class="w-full max-w-5xl mx-auto my-16">
+        <div class="rounded-[2.5rem] overflow-hidden border border-slate-100 bg-white shadow-2xl shadow-slate-200/50">
+            <!-- Header -->
+            <div class="flex items-center justify-between w-full bg-slate-50/50 py-7 px-10 border-b border-slate-100">
+                <div class="w-1/3 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">sender</div>
+                <div class="w-1/3 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] text-center">subject
+                </div>
+                <div class="w-1/3 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] text-right">inbox
+                    status</div>
             </div>
-            <div class="text-slate-900">
+
+            <!-- Content Area -->
+            <div class="min-h-[500px] p-8 sm:p-12">
                 <slot></slot>
-                <WaitingMsg  v-if="isWait" />
+                <div v-if="isWait">
+                    <WaitingMsg />
+                </div>
             </div>
         </div>
     </div>
 </template>
+
+
 
 <script>
 import WaitingMsg from './WaitingMsg.vue';
@@ -29,7 +32,7 @@ export default {
     },
     props: {
         isWait: {
-            Type: String,
+            type: Boolean,
             required: true,
         }
     }

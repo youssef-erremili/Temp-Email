@@ -1,86 +1,86 @@
 <template>
-    <nav class="w-full py-5 bg-slate-900">
-        <div class="items-center px-4 max-w-screen-xl mx-auto lg:flex lg:px-8">
-            <div class="flex items-center justify-between py-3 backdrop-filter lg:py-4 lg:block">
-                <router-link to="/" class="backdrop-filter">
-                    <img src="/errehub-dark.webp" width="120" class="backdrop-filter" height="50"
-                        alt="Errehub UI logo" />
-                </router-link>
-                <div class="lg:hidden">
-                    <button class="text-gray-700 outline-none p-2 rounded-md focus:border-gray-400 focus:border"
-                        @click="menuOpen()">
-                        <IconClose :class="[open ? 'block' : 'hidden']" />
-                        <IconMenu :class="[open ? 'hidden' : 'block']" />
-                    </button>
+    <nav class="w-full bg-slate-900 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <router-link to="/" class="flex items-center gap-2">
+                        <img src="/errehub-dark.webp" width="120" height="40" alt="Errehub UI logo"
+                            class="h-10 w-auto" />
+                    </router-link>
                 </div>
-            </div>
-            <div class="flex-1 justify-between flex-row-reverse lg:overflow-visible lg:flex lg:pb-0 lg:pr-0 lg:h-auto"
-                :class="[open ? 'h-screen pb-20 overflow-auto pr-4' : 'hidden']">
-                <div>
-                    <ul class="flex flex-col-reverse space-x-0 lg:space-x-6 lg:flex-row">
-                        <li class="mt-8 lg:mt-0">
-                            <router-link
-                                class="py-3 px-4 text-center font-medium text-black bg-yellow-400 hover:bg-indigo-700 rounded-md shadow block lg:inline"
-                                to="temp-number">
-                                Temp Number
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex flex-1 items-center justify-center px-8">
+                    <ul class="flex items-center space-x-6">
+                        <li v-for="link in navigation" :key="link.id">
+                            <router-link :to="link.router"
+                                class="text-yellow-300 hover:text-indigo-400 Transition-all font-medium">
+                                {{ link.title }}
                             </router-link>
                         </li>
                     </ul>
                 </div>
-                <div class="flex-1">
-                    <ul class="justify-center items-center space-y-8 lg:flex lg:space-x-6 lg:space-y-0">
-                        <li v-for="link in navigation" :key="link.id" class="text-yellow-300 hover:text-indigo-600">
-                            <router-link :to="link.router">{{ link.title }}</router-link>
-                        </li>
-                    </ul>
+
+                <!-- Right Side Actions -->
+                <div class="hidden lg:flex items-center">
+                    <router-link to="/temp-number"
+                        class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-6 py-2.5 rounded-md font-bold transition-all shadow-lg active:scale-95">
+                        Temp Number
+                    </router-link>
                 </div>
+
+                <!-- Mobile menu button -->
+                <div class="lg:hidden">
+                    <button
+                        class="inline-flex items-center justify-center p-2 rounded-lg text-yellow-300 hover:bg-slate-800 focus:outline-none transition-colors"
+                        @click="menuOpen()">
+                        <span class="sr-only">Open main menu</span>
+                        <IconMenu v-if="!open" class="block h-6 w-6" />
+                        <IconClose v-else class="block h-6 w-6" />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div v-show="open" class="lg:hidden bg-slate-900 border-t border-slate-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <router-link v-for="link in navigation" :key="link.id" :to="link.router"
+                    class="block px-3 py-4 rounded-lg text-base font-medium text-yellow-300 hover:bg-slate-800 transition-colors">
+                    {{ link.title }}
+                </router-link>
+                <router-link to="/temp-number"
+                    class="block px-3 py-4 rounded-lg text-base font-medium bg-yellow-400 text-slate-900 hover:bg-yellow-500 transition-colors mt-4 text-center">
+                    Temp Number
+                </router-link>
             </div>
         </div>
     </nav>
 </template>
 
-<style scoped>
-.sticky-nav {
-    animation: sticky-nav 300ms;
-}
-
-@keyframes sticky-nav {
-    0% {
-        transform: translateY(-6em)
-    }
-
-    100% {
-        transform: translateY(0)
-    }
-}
-</style>
-
 <script>
 import { ref } from 'vue';
 import IconMenu from './icons/IconMenu.vue';
 import IconClose from './icons/IconClose.vue';
+
 export default {
     components: {
         IconMenu,
         IconClose
     },
-    data: function () {
+    data() {
         return {
             navigation: [
-                { title: "Home", router: "/" },
-                { title: "Blog", router: "/" },
-                { title: "Contact", router: "/" },
-                { title: "About", router: "/" },
+                { id: 1, title: "Home", router: "/" },
             ]
         }
     },
     setup() {
-        let open = ref(false);
-        function menuOpen() {
+        const open = ref(false);
+        const menuOpen = () => {
             open.value = !open.value;
         }
         return { open, menuOpen };
-    },
-
+    }
 }
 </script>
